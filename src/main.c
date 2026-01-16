@@ -67,7 +67,7 @@ static int eventHandler(void){
 	while ((ev = xcb_wait_for_event(dpy))) {
 		//get response type and get rid of extra bit
 		uint8_t type = ev->response_type & ~0x80;
-		//make sure event type is within bounds for event handler array, prevent evil memory leak demons
+		//check that the handler function exists and make sure event type is within bounds for event handler array, prevent evil memory leak demons
 		if(event_handlers[type] && type < HANDLER_COUNT) {
 			event_handlers[type](ev);
 		}

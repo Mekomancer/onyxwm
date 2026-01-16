@@ -1,14 +1,25 @@
-# gcc compliler
+# Compiler, default is gcc
 CC = gcc
-# enable verbose warnings and optimize for speed
+# Compiler flags, enable verbose warnings and optimize for speed
 CFLAGS = -Wall -Wextra -O2
-# xcb and xcb keykodes
+# Libraries, xcb and xcb keysyms helper
 LIBS = -lxcb -xcb-keysyms
+# Files to be compiled
+SRCS = $(shell find src -name "*.c")
+# What files will be compiled into
+OBJS := $(SRCS:.c=.o)
+# Final executable name
+TARGET := onyxwm
+
+all: $(TARGET)
 # target onyxwm
-all: onyxwm
-# define target
-onyxwm: main.c
-	# build
-	$(CC) $(CFLAGS) main.c -o onyxwm $(LIBS)
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	rm -f onyxwm
+	rm -f $(OBJS) $(TARGET)
+
+.PHONY: all clean

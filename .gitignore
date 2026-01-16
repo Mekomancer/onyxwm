@@ -1,2 +1,26 @@
+# Object files
+*.o
+
+# Executable
 onyxwm
+*.out
+
+# Dependency files
+*.d
+
+# Editor temporary files
+*~
+*.swp
+*.swo
+*.swm
+
+# Logs
+*.log
+
+# OS metadata
+.DS_Store
+
+# IDE files (optional)
+.vscode/
+.idea/
 
