@@ -4,8 +4,8 @@
 #include <xcb/xcb_event.h> // Event helpers
 #include <stdio.h>        // printf, fprintf
 #include <stdlib.h>       // exit, free
-#include <unistd.h>       // fork, execlp
-#include <sys/types.h>    // pid_t
+
+#include "wm.h"
 
 //definitions
 //length for the event_handlers array
@@ -14,14 +14,12 @@
 typedef void (*event_handler_t)(xcb_generic_event_t *);
 
 //function declaration
-void spawn(char **program);
 void handleKeyPress(xcb_generic_event_t *ev);
 void handleMapRequest(xcb_generic_event_t *ev);
 void handleEvent(xcb_generic_event_t *ev);
-void exitWM(int ret);
 
 //connection to xcb
-static xcb_connection_t *dpy;
+xcb_connection_t *dpy;
 //xcb screen
 static xcb_screen_t *scre;
 
@@ -32,17 +30,6 @@ static event_handler_t event_handlers[HANDLER_COUNT] = {
 };
 
 
-// spawn program
-// char **program is an array of arguments for the program ending in null
-void spawn(char **program) {
-	if (fork() == 0) { //fork and continue if the program is the child
-		// Child process
-		setsid(); // Start a new session (detach from controlling terminal)
-		execvp((char*)program[0], (char**)program); // Replace process image with program
-		_exit(0); //Exit once the process is over
-	}
-	// Parent process does nothing; child runs the program
-}
 //handle key press event idk
 void handleKeyPress(xcb_generic_event_t *ev){
 	//todo: fix chatgpt code with something actually good for key handling
@@ -73,21 +60,6 @@ void handleEvent(xcb_generic_event_t *ev){
 	else{
 		fprintf(stderr, "Unknown event type: %u\n", ev->response_type);
 	}
-}
-void exitWM(int ret){
-	//disconnect
-	if(dpy){
-		xcb_disconnect(dpy);
-		dpy = NULL;
-	}
-	if(ret){
-		printf("Exiting onyxWM successfully");
-	}
-	else{
-		printf("Exiting onyxWM with error");
-	}
-	//exit program with code from argument
-	exit(ret);
 }
 int main(void) {
 	int ret = 0;
