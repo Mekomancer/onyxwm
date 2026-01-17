@@ -14,11 +14,11 @@
 typedef void (*event_handler_t)(xcb_generic_event_t *);
 
 //function declaration
-static void spawn(char **program);
-static void handleKeyPress(xcb_generic_event_t *ev);
-static void handleMapRequest(xcb_generic_event_t *ev);
-static int eventHandler(void);
-static void exitWM(int ret);
+void spawn(char **program);
+void handleKeyPress(xcb_generic_event_t *ev);
+void handleMapRequest(xcb_generic_event_t *ev);
+void handleEvent(xcb_generic_event_t *ev);
+void exitWM(int ret);
 
 //connection to xcb
 static xcb_connection_t *dpy;
@@ -61,25 +61,18 @@ void handleMapRequest(xcb_generic_event_t *ev){
 	// Flush to make sure the window is displayed
 	xcb_flush(dpy);
 }
-//handle events, duh. It waits for events from xcb, then sends the event to a handler function from event_handlers
-static int eventHandler(void){	
-	xcb_generic_event_t *ev;
-	while ((ev = xcb_wait_for_event(dpy))) {
-		//get response type and get rid of extra bit
-		uint8_t type = ev->response_type & ~0x80;
-		//check that the handler function exists and make sure event type is within bounds for event handler array, prevent evil memory leak demons
-		if(event_handlers[type] && type < HANDLER_COUNT) {
-			event_handlers[type](ev);
-		}
-
-		else{
-			fprintf(stderr, "Unknown event type: %u\n", ev->response_type);
-		}
-
-		// Free the event memory after handling it
-		free(ev);
+// Takes in an event and sends the event to a handler function from event_handlers
+void handleEvent(xcb_generic_event_t *ev){
+	//get response type and get rid of extra bit
+	uint8_t type = ev->response_type & ~0x80;
+	//check that the handler function exists and make sure event type is within bounds for event handler array, prevent evil memory leak demons
+	if(event_handlers[type] && type < HANDLER_COUNT) {
+		event_handlers[type](ev);
 	}
-	return 0;
+
+	else{
+		fprintf(stderr, "Unknown event type: %u\n", ev->response_type);
+	}
 }
 void exitWM(int ret){
 	//disconnect
@@ -149,7 +142,17 @@ int main(void) {
 	spawn((char *[]){"xwallpaper","--zoom", "/home/void/.config/wallpaper", NULL});
 
 	// Wait for incoming events forever, returns whether it exited normally or from an error
-	ret = eventHandler();
+	xcb_generic_event_t *ev;
+	// blocks until xcb gives us a new event
+	while ((ev = xcb_wait_for_event(dpy))) {
+		handleEvent(ev);
+		// event needs to freed since xcb gives us ownership
+		free(ev);
+		// break if xcb connection has an error
+		if((ret = xcb_connection_has_error(dpy))){
+			break;
+		}
+	}
 	//exit after event loop is complete
 	exitWM(ret);
 }
