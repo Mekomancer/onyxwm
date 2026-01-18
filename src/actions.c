@@ -4,7 +4,7 @@
 #include "actions.h"
 
 // wrapper function for exitWM
-void quit(arg_t arg){
+void quit(const arg_t *arg){
 	// stop compiler from complaining about not using argument
 	(void)arg;
 	//exit without error

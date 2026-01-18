@@ -4,6 +4,6 @@
 
 #include "types.h"
 
-void quit(arg_t arg);
+void quit(const arg_t *arg);
 
 #endif

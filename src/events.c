@@ -1,10 +1,17 @@
-#include <xcb/xcb_keysyms.h> // XCB helper for key symbol handling (optional here)
+#include <xcb/xcb_keysyms.h> // XCB helper for key symbol handling
 #include <xcb/xproto.h>   // X protocol types and constants (MapRequest, KeyPress, etc.)
 #include <xcb/xcb_event.h> // Event helpers
 #include <stdio.h>        // printf, fprintf
 
 #include "events.h"
 #include "wm.h"
+
+//block needed for config
+#include <X11/keysym.h>
+#include "types.h"
+#include "actions.h"
+#include "config/keybindings.h"
+
 
 //definitions
 //length for the event_handlers array
@@ -15,6 +22,7 @@ typedef void (*event_handler_t)(xcb_generic_event_t *);
 //function declaration
 static void handleKeyPress(xcb_generic_event_t *ev);
 static void handleMapRequest(xcb_generic_event_t *ev);
+static xcb_keysym_t getKeysym(xcb_keycode_t keycode);
 
 
 // declared in main.c, needed to do xcb stuff
@@ -41,11 +49,16 @@ void handleEvent(xcb_generic_event_t *ev){
 
 //handle key press event idk
 static void handleKeyPress(xcb_generic_event_t *ev){
-	//todo: fix chatgpt code with something actually good for key handling
-	// Emergency exit: Ctrl+Alt+Escape
-	xcb_key_press_event_t *kp = (xcb_key_press_event_t *)ev; // Cast to key press event
-	if ((kp->state & (XCB_MOD_MASK_CONTROL | XCB_MOD_MASK_1)) && kp->detail == 9) { // Check modifiers and Escape key
-	    exitWM(0);
+	//typcast event
+	xcb_key_press_event_t *e = (xcb_key_press_event_t *)ev;
+	// convert event keycode to keysym
+	xcb_keysym_t keysym = getKeysym(e->detail);
+	//get length of keybinding table
+	int keys_length = sizeof(keys) / sizeof(keys[0]);
+	for(int i = 0; i < keys_length; i++){
+		if((keys[i].keysym == keysym) && (keys[i].mod == e->state)){
+			keys[i].func(&(keys[i].arg));
+		}
 	}
 }
 
@@ -58,4 +71,12 @@ static void handleMapRequest(xcb_generic_event_t *ev){
 	// Flush to make sure the window is displayed
 	xcb_flush(dpy);
 }
-
+static xcb_keysym_t getKeysym(xcb_keycode_t keycode){
+	// Creates mapping table for keysyms
+	xcb_key_symbols_t *keysyms = xcb_key_symbols_alloc(dpy);
+	// convert keysym if mapping table exists
+	xcb_keysym_t keysym = (keysyms ? xcb_key_symbols_get_keysym(keysyms, keycode, 0) : 0);
+	// mapping table needs to be freed since we allocated it
+	xcb_key_symbols_free(keysyms);
+	return keysym;
+}
