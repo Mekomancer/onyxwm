@@ -56,11 +56,9 @@ int main(void) {
 	// Flush requests to the X server to ensure they are sent
 	xcb_flush(dpy);
 	printf("onxyWM is running");
-
-
-
-	spawn((char *[]){"st", NULL});
-	spawn((char *[]){"xwallpaper","--zoom", "/home/void/.config/wallpaper", NULL});
+	
+	// start autostart apps
+	autostart();
 
 	// Wait for incoming events forever, returns whether it exited normally or from an error
 	xcb_generic_event_t *ev;

@@ -3,6 +3,7 @@
 
 void spawn(char **program);
 void exitWM(int ret);
+void autostart(void);
 
 #endif
 
