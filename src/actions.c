@@ -3,9 +3,7 @@
 #include "actions.h"
 
 // wrapper function for exitWM
-void quit(const arg_t *arg){
-	// stop compiler from complaining about not using argument
-	(void)arg;
+void quit(__attribute__((unused)) const arg_t *arg){
 	//exit without error
 	exitWM(0);
 }
