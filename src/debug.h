@@ -1,5 +1,6 @@
 #pragma once
 
+<<<<<<< HEAD
 /**
  * @brief Logs a message to stdout and log file
  *
@@ -20,3 +21,7 @@ void logMessage(const char *msg, int n, ...);
  * @param ... Substitutions
  */
 void logError(const char *msg, int n, ...);
+=======
+void log_msg(const char *fmt, ...);
+void log_err(const char *fmt, ...);
+>>>>>>> 0590099 (Added logging to a file)

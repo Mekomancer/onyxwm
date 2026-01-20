@@ -5,18 +5,21 @@
 
 #include <xcb/xcb.h>      // XCB core header
 #include <xcb/xcb_keysyms.h> // XCB helper for key symbol handling
-#include <stdio.h>        // printf, fprintf
 #include <stdlib.h>       // exit, free
 #include <unistd.h>       // fork, execlp
 #include <sys/types.h>    // pid_t
 
+<<<<<<< HEAD
 #include "debug.h"
 
+=======
+>>>>>>> 0590099 (Added logging to a file)
 // Already declared in main, needed to handle xcb stuff
 extern xcb_connection_t *dpy;
 // Already declared in main, current screen
 extern xcb_screen_t *scre;
 
+#include "debug.h"
 #include "config/autostart.h"
 
 void spawn(char **program) {
@@ -36,10 +39,17 @@ void exitWM(int ret){
 		dpy = NULL;
 	}
 	if(!ret){
+<<<<<<< HEAD
 		logMessage("Exiting onyxWM successfully\n", 1);
 	}
 	else{
 		logError("Exiting onyxWM with error\n", 1);
+=======
+		log_msg("Exiting onyxWM successfully\n");
+	}
+	else{
+		log_msg("Exiting onyxWM with error\n");
+>>>>>>> 0590099 (Added logging to a file)
 	}
 	//exit program with code from argument
 	exit(ret);

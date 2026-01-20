@@ -11,6 +11,7 @@
 #include "events.h"
 #include "debug.h"
 #include "wm.h"
+#include "debug.h"
 
 //block needed for config
 #include <X11/keysym.h>
@@ -60,10 +61,15 @@ void handleEvent(xcb_generic_event_t *ev){
 	//check that the handler function exists and make sure event type is within bounds for event handler array, prevent evil memory leak demons
 	if(event_handlers[type] && type < HANDLER_COUNT) {
 		event_handlers[type](ev);
+<<<<<<< HEAD
 	}
 
 	else{
 		logError("Unknown event type: %u\n", 1, ev->response_type);
+=======
+	} else {
+		log_err("Unknown event type: %u\n", ev->response_type);
+>>>>>>> 0590099 (Added logging to a file)
 	}
 }
 
