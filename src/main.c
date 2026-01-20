@@ -70,7 +70,7 @@ int main(void) {
 
 	// Flush requests to the X server to ensure they are sent
 	xcb_flush(dpy);
-	printf("onxyWM is running");
+	printf("onxyWM is running\n");
 	
 	// start autostart apps
 	autostart();

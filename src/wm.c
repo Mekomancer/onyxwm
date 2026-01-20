@@ -29,11 +29,11 @@ void exitWM(int ret){
 		xcb_disconnect(dpy);
 		dpy = NULL;
 	}
-	if(ret){
-		printf("Exiting onyxWM successfully");
+	if(!ret){
+		printf("Exiting onyxWM successfully\n");
 	}
 	else{
-		printf("Exiting onyxWM with error");
+		printf("Exiting onyxWM with error\n");
 	}
 	//exit program with code from argument
 	exit(ret);
