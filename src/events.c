@@ -1,9 +1,9 @@
 #include <xcb/xproto.h>   // X protocol types and constants (MapRequest, KeyPress, etc.)
 #include <xcb/xcb_event.h> // Event helpers
+#include <stdio.h>        // printf, fprintf
 
 #include "events.h"
 #include "wm.h"
-#include "debug.h"
 
 //block needed for config
 #include <X11/keysym.h>
@@ -37,8 +37,10 @@ void handleEvent(xcb_generic_event_t *ev){
 	//check that the handler function exists and make sure event type is within bounds for event handler array, prevent evil memory leak demons
 	if(event_handlers[type] && type < HANDLER_COUNT) {
 		event_handlers[type](ev);
-	} else {
-		log_err("Unknown event type: %u\n", ev->response_type);
+	}
+
+	else{
+		fprintf(stderr, "Unknown event type: %u\n", ev->response_type);
 	}
 }
 
@@ -65,7 +67,5 @@ static void handleMapRequest(xcb_generic_event_t *ev){
 	xcb_map_window(dpy, e->window);
 	// Flush to make sure the window is displayed
 	xcb_flush(dpy);
-	// Give new window focus
-	focusWin(e->window);
 }
 

@@ -1,0 +1,84 @@
+#include "debug.h"
+#include <stdarg.h> //vairadic funcs
+#include <stdio.h> //printf() fprintf() fopen()
+#include <time.h> //time stamps
+#include <fcntl.h> // open() openat()
+#include <sys/stat.h> //mkdir() 
+#include <stdlib.h> //getenv()
+#include <string.h> //strcat() strcpy()
+
+static FILE *LOG_FILE = NULL; // Log file handle
+
+// opens the log file
+// returns whether the opening was succesful
+bool open_log(){
+	if(LOG_FILE != (FILE*)NULL){ 
+		// if not null then the handle has already been opened
+		return true;
+	}
+	// directory fd to the home directory
+	int home_dir = open(getenv("HOME"), O_DIRECTORY | O_RDONLY); 
+	// if .local doesn't exist, it shouldn't be created
+	// if .local/share doesn't exits, it shouldn't be created
+	// this checks for both
+	if(openat(home_dir, ".local/share", O_RDONLY | O_DIRECTORY) < 0){
+		fprintf(stderr, "~/.local/share does not exist or can't be read, can't open log file\n");
+		return false;
+	}
+	// if the sub-directory for onyxwm doesn't exist, create it
+	if(openat(home_dir, ".local/share/onyxwm", O_RDONLY| O_DIRECTORY) < 0){
+		printf("~/.local/share/onyxwm does not exist, creating\n");
+		if(mkdirat(home_dir, ".local/share/onyxwm", 0777) < 0){
+			fprintf(stderr,"Couldn't create ~/.local/share/onyxwm\n");	
+			return false;
+		}
+	}
+	// using fopen, and there is no fopenat, so the log dir must be concated
+	char log_path[99] = "";
+	strcpy(log_path, getenv("HOME"));
+	strcat(log_path, "/.local/share/onyxwm/onyxwm.log");
+	// if the file doesn't exist, this will create it, assuming the directory exists
+	LOG_FILE = fopen(log_path, "w");
+	// if fopen fails LOG_FILE will be null
+	return LOG_FILE != NULL;
+};
+// file log
+void flog(char *type, const char *fmt,va_list args){
+	// if open fails, return, logging to files is optional
+	if(!open_log()) return;
+	char msg[42];
+	// get formated time
+	strftime(msg, sizeof(msg), "%T", localtime(&(time_t){time(NULL)}));
+	// print timestamp
+	fprintf(LOG_FILE,"[%s]", msg);
+	// print type of message, e.g. MSG or ERR
+	fprintf(LOG_FILE, " %s ", type);
+	//print the message 
+	vfprintf(LOG_FILE, fmt, args); 
+}
+
+// see debug.h
+void logMessage(const char *fmt, ...){
+	va_list args;
+	va_start(args);
+	// print to stdout
+	printf(fmt, args);
+	va_end(args);
+	va_start(args);
+	//log to file with type MSG
+	flog("MSG", fmt, args);
+	va_end(args);
+}
+
+// see debug.h
+void logError(const char *fmt, ...){
+	va_list args;
+	va_start(args);
+	// print to stderr
+	fprintf(stderr, fmt, args);
+	va_end(args);
+	va_start(args);
+	// log to file with type ERR
+	flog("ERR", fmt, args);
+	va_end(args);
+}
