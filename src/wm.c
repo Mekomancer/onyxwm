@@ -1,14 +1,15 @@
 #include <xcb/xcb.h>      // XCB core header
 #include <xcb/xcb_keysyms.h> // XCB helper for key symbol handling
-#include <stdio.h>        // printf, fprintf
 #include <stdlib.h>       // exit, free
 #include <unistd.h>       // fork, execlp
 #include <sys/types.h>    // pid_t
 
-
 // Already declared in main, needed to handle xcb stuff
 extern xcb_connection_t *dpy;
+// Already declared in main, current screen
+extern xcb_screen_t *scre;
 
+#include "debug.h"
 #include "config/autostart.h"
 
 // spawn program
@@ -30,10 +31,10 @@ void exitWM(int ret){
 		dpy = NULL;
 	}
 	if(!ret){
-		printf("Exiting onyxWM successfully\n");
+		log_msg("Exiting onyxWM successfully\n");
 	}
 	else{
-		printf("Exiting onyxWM with error\n");
+		log_msg("Exiting onyxWM with error\n");
 	}
 	//exit program with code from argument
 	exit(ret);
@@ -45,6 +46,12 @@ void autostart() {
 	for(int i = 0; autostart_list[i][0] != NULL; i++){
 		// spawn the program in the current index
 		spawn(autostart_list[i]);
+	}
+}
+
+void focusWin(xcb_drawable_t win) {
+	if ((win != 0) && (win != scre->root)){
+		xcb_set_input_focus(dpy, XCB_INPUT_FOCUS_POINTER_ROOT, win, XCB_CURRENT_TIME);
 	}
 }
 
