@@ -68,10 +68,10 @@ int main(void) {
 			xcb_grab_key(dpy, 1, scre->root, keys[i].mod, *keycode, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC);
 		}
 	}
-
-
-	// Flush requests to the X server to ensure they are sent
 	xcb_flush(dpy);
+	// grab mouse bindings (mod + left/right)
+	xcb_grab_button(dpy, 0, scre->root, XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, scre->root, XCB_NONE, 1, MOD);
+	xcb_grab_button(dpy, 0, scre->root, XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, scre->root, XCB_NONE, 3, MOD);
 	printf("onxyWM is running\n");
 	
 	// start autostart apps
