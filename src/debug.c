@@ -50,11 +50,11 @@ void flog(char *type, const char *msg, va_list args){
 	if(!openLog()) return;
 	char stamp[42];
 	// get formated time
-	strftime(stamp, sizeof(stamp), "%T", localtime(&(time_t){time(NULL)}));
+	strftime(stamp, sizeof(stamp), "%x - %X", localtime(&(time_t){time(NULL)}));
 	// print timestamp
-	fprintf(LOG_FILE,"[%s]", msg);
+	fprintf(LOG_FILE,"[%s]", stamp);
 	// print type of message, e.g. MSG or ERR
-	fprintf(LOG_FILE, " %s ", type);
+	fprintf(LOG_FILE, " %s: ", type);
 	//print the message 
 	vfprintf(LOG_FILE, msg, args); 
 }
