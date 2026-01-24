@@ -11,7 +11,7 @@ static FILE *LOG_FILE = NULL; // Log file handle
 
 // opens the log file
 // returns whether the opening was succesful
-bool open_log(){
+bool openLog(){
 	if(LOG_FILE != (FILE*)NULL){ 
 		// if not null then the handle has already been opened
 		return true;
@@ -45,7 +45,7 @@ bool open_log(){
 // file log
 void flog(char *type, const char *fmt,va_list args){
 	// if open fails, return, logging to files is optional
-	if(!open_log()) return;
+	if(!openLog()) return;
 	char msg[42];
 	// get formated time
 	strftime(msg, sizeof(msg), "%T", localtime(&(time_t){time(NULL)}));
