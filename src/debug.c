@@ -60,26 +60,22 @@ void flog(char *type, const char *fmt,va_list args){
 }
 
 // see debug.h
-void logMessage(const char *fmt, ...){
+void logMessage(const char *fmt, int n, ...){
 	va_list args;
-	va_start(args);
+	va_start(args, n);
 	// print to stdout
 	printf(fmt, args);
-	va_end(args);
-	va_start(args);
 	//log to file with type MSG
 	flog("MSG", fmt, args);
 	va_end(args);
 }
 
 // see debug.h
-void logError(const char *fmt, ...){
+void logError(const char *fmt, int n, ...){
 	va_list args;
-	va_start(args);
+	va_start(args, n);
 	// print to stderr
 	fprintf(stderr, fmt, args);
-	va_end(args);
-	va_start(args);
 	// log to file with type ERR
 	flog("ERR", fmt, args);
 	va_end(args);
