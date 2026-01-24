@@ -1,5 +1,5 @@
 #include "debug.h"
-#include <stdarg.h> //vairadic funcs
+#include <stdarg.h> //variadic funcs
 #include <stdio.h> //printf() fprintf() fopen()
 #include <time.h> //time stamps
 #include <fcntl.h> // open() openat()
