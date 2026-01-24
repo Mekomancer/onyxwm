@@ -5,6 +5,7 @@
 #include <unistd.h>       // fork, execlp
 #include <sys/types.h>    // pid_t
 
+#include "debug.h"
 
 // Already declared in main, needed to handle xcb stuff
 extern xcb_connection_t *dpy;
@@ -34,10 +35,10 @@ void exitWM(int ret){
 		dpy = NULL;
 	}
 	if(!ret){
-		printf("Exiting onyxWM successfully\n");
+		logMessage("Exiting onyxWM successfully\n", 1);
 	}
 	else{
-		printf("Exiting onyxWM with error\n");
+		logError("Exiting onyxWM with error\n", 1);
 	}
 	//exit program with code from argument
 	exit(ret);

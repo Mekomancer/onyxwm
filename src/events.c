@@ -3,6 +3,7 @@
 #include <stdio.h>        // printf, fprintf
 
 #include "events.h"
+#include "debug.h"
 #include "wm.h"
 
 //block needed for config
@@ -47,7 +48,7 @@ void handleEvent(xcb_generic_event_t *ev){
 	}
 
 	else{
-		fprintf(stderr, "Unknown event type: %u\n", ev->response_type);
+		logError("Unknown event type: %u\n", 1, ev->response_type);
 	}
 }
 

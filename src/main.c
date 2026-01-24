@@ -1,7 +1,7 @@
 #include <xcb/xcb.h>      // XCB core header
-#include <stdio.h>        // printf, fprintf
 #include <stdlib.h>       // exit, free
 
+#include "debug.h"
 #include "wm.h"
 #include "events.h"
 
@@ -26,7 +26,7 @@ int main(void) {
 	dpy = xcb_connect(NULL, &screen_number);
 	// Check if the connection has an error
 	if (xcb_connection_has_error(dpy)) {
-		fprintf(stderr, "Failed to connect to X server\n");
+		logError("Failed to connect to X server\n", 0);
 		return 1;
 	} 
 	//get setup info
@@ -55,7 +55,7 @@ int main(void) {
 	// Check if the request failed (i.e., another WM is running)
 	xcb_generic_error_t *err = xcb_request_check(dpy, cookie);
 	if (err) {
-		fprintf(stderr, "Another window manager is already running\n");
+		logError("Another window manager is already running\n", 0);
 		free(err);
 		xcb_disconnect(dpy);
 		return 1;
@@ -72,7 +72,7 @@ int main(void) {
 	// grab mouse bindings (mod + left/right)
 	xcb_grab_button(dpy, 0, scre->root, XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, scre->root, XCB_NONE, 1, MOD);
 	xcb_grab_button(dpy, 0, scre->root, XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, scre->root, XCB_NONE, 3, MOD);
-	printf("onxyWM is running\n");
+	logMessage("onxyWM is running\n", 0);
 	
 	// start autostart apps
 	autostart();
