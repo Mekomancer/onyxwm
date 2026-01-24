@@ -1,13 +1,14 @@
+/** @file debug.c */
 #include "debug.h"
-#include <stdarg.h> //vairadic funcs
+#include <stdarg.h> //variadic funcs
 #include <stdio.h> //printf() fprintf() fopen()
 #include <time.h> //time stamps
 #include <fcntl.h> // open() openat()
 #include <sys/stat.h> //mkdir() 
 #include <stdlib.h> //getenv()
 #include <string.h> //strcat() strcpy()
-
-static FILE *LOG_FILE = NULL; // Log file handle
+/** Log file handle */
+static FILE *LOG_FILE = NULL; 
 
 // opens the log file
 // returns whether the opening was succesful
