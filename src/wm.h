@@ -47,3 +47,4 @@ xcb_keycode_t *getKeycode(xcb_keysym_t keysym);
 
 #endif
 
+/* vim:set ft=c:set syn=c.doxygen: */

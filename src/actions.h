@@ -18,3 +18,5 @@ void quit(const arg_t *arg);
 void spawnAct(const arg_t *arg);
 
 #endif
+
+/* vim:set ft=c:set syn=c.doxygen: */

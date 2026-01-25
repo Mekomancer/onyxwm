@@ -12,3 +12,5 @@
 void handleEvent(xcb_generic_event_t *ev);
 
 #endif
+
+/* vim:set ft=c:set syn=c.doxygen: */

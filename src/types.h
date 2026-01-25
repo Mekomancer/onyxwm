@@ -22,3 +22,5 @@ typedef struct {
 } keybinding_t;
 
 #endif
+
+/* vim:set ft=c:set syn=c.doxygen: */
