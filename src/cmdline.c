@@ -1,18 +1,23 @@
 /**
  * @file cmdline.c
- * @sa cmdline.h
+ * @see cmdline.h
  */
 
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+
 /**
- * @brief prints a help message to stdout
+ * @brief prints version info
  */
 void printVersion(){
 	// VERSION defined by build system
 	printf("OnyxWM %s\n",VERSION);
 };
+
+/**
+ * @brief prints a help message to stdout
+ */
 void printHelp(){
 	printVersion();
 	printf("\nUSAGE: onyxwm [options]\n");
