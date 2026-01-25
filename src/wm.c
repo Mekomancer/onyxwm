@@ -1,3 +1,8 @@
+/**
+ * @file wm.c
+ * @brief Functions without a better place
+ */
+
 #include <xcb/xcb.h>      // XCB core header
 #include <xcb/xcb_keysyms.h> // XCB helper for key symbol handling
 #include <stdio.h>        // printf, fprintf
