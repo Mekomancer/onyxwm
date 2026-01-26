@@ -1,3 +1,6 @@
+/**
+ * @file keybindings.h
+ */
 #include "../types.h"
 
 // Main modkey, default is super key
@@ -8,10 +11,14 @@
 static const char *launcher_cmd[] = {"j4-dmenu-desktop", NULL};
 static const char *term_cmd[] = {"st", NULL};
 
-// keybinding table, intended to modified
-// modifier key, key, function, argument
+/**
+ * @brief keybinding table, intended to modified
+ * @ref keybinding_t
+ */
 static const keybinding_t keys[] = {
-	{MOD,        XK_r,         spawnAct,        {.v = launcher_cmd}}, 
-	{MOD,        XK_Return,             spawnAct,    {.v = term_cmd}}, 
-	{MOD|SHIFT,  XK_Escape,        quit,        {0}}, 
+	{MOD,        XK_r,         spawnAct,        {.v = launcher_cmd}},
+	{MOD,        XK_Return,             spawnAct,    {.v = term_cmd}},
+	{MOD|SHIFT,  XK_Escape,        quit,        {0}},
 };
+
+/* vim:set ft=c:set syn=c.doxygen: */

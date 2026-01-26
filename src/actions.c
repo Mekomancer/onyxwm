@@ -6,6 +6,7 @@
 #include "wm.h"
 #include "actions.h"
 
+// see actions.h
 void quit(const arg_t *arg){
 	// stop compiler from complaining about not using argument
 	(void)arg;
@@ -13,6 +14,7 @@ void quit(const arg_t *arg){
 	exitWM(0);
 }
 
+// see actions.h
 void spawnAct(const arg_t *arg){
 	// typecast void pointer and send to spawn
 	spawn((char **)arg->v);

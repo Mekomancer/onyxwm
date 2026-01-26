@@ -1,3 +1,7 @@
+/**
+ * @file wm.h
+ * @see wm.c
+ */
 #ifndef WM_H
 #define WM_H
 #include <xcb/xcb_keysyms.h>

@@ -1,3 +1,7 @@
+/**
+ * @file debug.h
+ * @see debug.c
+ */
 #pragma once
 
 /**
@@ -14,6 +18,8 @@ void logMessage(const char *msg, int n, ...);
  * @brief Logs a message to stderr and log file
  *
  * Works like printf: arbitrary substitution arguments
+ *
+ * @see
  *
  * @param msg The message to log
  * @param n The number of arguments

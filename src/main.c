@@ -1,3 +1,7 @@
+/**
+ * @file main.c
+ * @brief main program file
+ */
 #include <xcb/xcb.h>      // XCB core header
 #include <stdlib.h>       // exit, free
 
@@ -28,7 +32,7 @@ int main(void) {
 	if (xcb_connection_has_error(dpy)) {
 		logError("Failed to connect to X server\n", 0);
 		return 1;
-	} 
+	}
 	//get setup info
 	const xcb_setup_t *setup = xcb_get_setup(dpy);
 	// Iterator over available screens
@@ -73,7 +77,7 @@ int main(void) {
 	xcb_grab_button(dpy, 0, scre->root, XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, scre->root, XCB_NONE, 1, MOD);
 	xcb_grab_button(dpy, 0, scre->root, XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, scre->root, XCB_NONE, 3, MOD);
 	logMessage("onxyWM is running\n", 0);
-	
+
 	// start autostart apps
 	autostart();
 

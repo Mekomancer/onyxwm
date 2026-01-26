@@ -1,4 +1,7 @@
-// events.h
+/**
+ * @file events.h
+ * @see events.c
+ */
 #ifndef EVENTS_H
 #define EVENTS_H
 
