@@ -16,8 +16,6 @@
 xcb_connection_t *dpy;
 //xcb screen
 xcb_screen_t *scre;
-// buffer for attributes (eg. for xcb_change_window_attributes_checked)
-uint32_t attribute_buf[2];
 
 int main(void) {
 	int ret = 0;
@@ -45,12 +43,12 @@ int main(void) {
 
 	// We must ask to receive SubstructureRedirect events on the root window.
 	// Only one client can do this at a time. If this fails, another WM is running.
-	attribute_buf[0] = XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |
+	uint32_t event_mask = XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |
 			XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY |
 			XCB_EVENT_MASK_KEY_PRESS;
 	// Set the event mask on the root window (checked call so we can verify success)
 	xcb_void_cookie_t cookie = xcb_change_window_attributes_checked(
-		dpy, root, XCB_CW_EVENT_MASK, attribute_buf
+		dpy, root, XCB_CW_EVENT_MASK, &event_mask
 	);
 	// Check if the request failed (i.e., another WM is running)
 	xcb_generic_error_t *err = xcb_request_check(dpy, cookie);
