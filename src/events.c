@@ -29,6 +29,7 @@ static void handleMapRequest(xcb_generic_event_t *ev);
 static void handleMapNotify(xcb_generic_event_t *ev);
 
 extern xcb_connection_t *dpy;
+extern xcb_drawable_t foc_win;
 //define an array of event handlers; the xcb event code has a corresponding entry for the function
 static event_handler_t event_handlers[HANDLER_COUNT] = {
 	[XCB_KEY_PRESS]      = handleKeyPress,
@@ -90,7 +91,8 @@ static void handleMapNotify(xcb_generic_event_t *ev){
 	// cast the generic event to a map notify event
 	xcb_map_notify_event_t *e = (xcb_map_notify_event_t *)ev;
 	// focus the window which notified
-	raiseWin(e-> window);
-	focusInput(e-> window);
+	foc_win = e->window;
+	raiseWin(e->window);
+	focusInput(foc_win);
 	xcb_flush(dpy);
 }

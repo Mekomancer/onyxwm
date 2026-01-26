@@ -7,8 +7,9 @@
 
 #include <xcb/xcb.h>
 
-//connection to xcb
+/** connection to the x server */
 xcb_connection_t *dpy;
-//xcb screen
+/** the xcb screen */
 xcb_screen_t *scre;
-
+/** current focused window, might not be accurate */
+xcb_drawable_t foc_win;
