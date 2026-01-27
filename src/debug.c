@@ -76,8 +76,11 @@ void flog(char *type, const char *msg, va_list args){
 	fprintf(LOG_FILE,"[%s]", stamp);
 	// print type of message, e.g. MSG or ERR
 	fprintf(LOG_FILE, " %s: ", type);
-	//print the message
+	// print the message
 	vfprintf(LOG_FILE, msg, args);
+	// make sure the log file updates immediately
+	// only updates after program close otherwise
+	fflush(LOG_FILE);
 }
 
 // see debug.h
