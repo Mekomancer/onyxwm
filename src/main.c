@@ -18,6 +18,9 @@ extern xcb_connection_t *dpy;
 extern xcb_screen_t *scre;
 
 int main(void) {
+	// =================================================================
+	// = core setup                                                    =
+	// =================================================================
 	int ret = 0;
 	int screen_number; // Will be set to the screen number we're using
 	// Connect to the default display
@@ -38,9 +41,6 @@ int main(void) {
 	scre = iter.data;
 	// Get the root window of that screen
 	xcb_window_t root = scre->root;
-
-
-
 	// We must ask to receive SubstructureRedirect events on the root window.
 	// Only one client can do this at a time. If this fails, another WM is running.
 	uint32_t event_mask = XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT | // exclusive to wm
@@ -63,6 +63,9 @@ int main(void) {
 		xcb_disconnect(dpy);
 		return -1;
 	}
+	// =================================================================
+	// = other setup                                                   =
+	// =================================================================
 	// grab keybindings
 	int keys_length = sizeof(keys) / sizeof(keys[0]);
 	for (int i =  0; i < keys_length; i++){
@@ -79,6 +82,10 @@ int main(void) {
 
 	// start autostart apps
 	autostart();
+
+	// =================================================================
+	// = event loop                                                    =
+	// =================================================================
 
 	// Wait for incoming events forever, returns whether it exited normally or from an error
 	xcb_generic_event_t *ev;
